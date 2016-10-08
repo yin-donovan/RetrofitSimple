@@ -1,6 +1,7 @@
 package com.unbelievable.tangweny.retrofitsimple.http;
 
 import com.unbelievable.tangweny.retrofitsimple.PhoneResult;
+import com.unbelievable.tangweny.retrofitsimple.ResultItem;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -18,5 +19,8 @@ public class HttpClient {
 
         @GET("/apistore/mobilenumber/mobilenumber")
         Call<PhoneResult> getResult(@Header("apikey") String apikey, @Query("phone") String phone);
+
+        @GET("/simple")
+        Call<ResultItem> getResultItem();
     }
 }

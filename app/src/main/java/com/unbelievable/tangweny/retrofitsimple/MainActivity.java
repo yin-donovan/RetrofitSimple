@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.unbelievable.tangweny.retrofitsimple.http.HttpClient;
+import com.unbelievable.tangweny.retrofitsimple.http.RetrofitClient;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,8 +32,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
     }
-    @OnClick(R.id.query)
+    @OnClick({R.id.query,R.id.query2})
     public void onClick(View view){
+        if (view.getId() == R.id.query) {
+            query1();
+        }else if (view.getId() == R.id.query2){
+            query2();
+        }
+
+    }
+
+    private void query1() {
         //1.创建Retrofit对象
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())//解析方法
@@ -59,6 +69,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onFailure(Call<PhoneResult> call, Throwable t) {
+
+            }
+        });
+    }
+    private void query2() {
+        RetrofitClient.APIService service = RetrofitClient.create();
+        Call<ResultItem> call = service.getResultItem();
+        //3.发送请求
+        call.enqueue(new Callback<ResultItem>() {
+            @Override
+            public void onResponse(Call<ResultItem> call, Response<ResultItem> response) {
+                //4.处理结果
+                if (response.isSuccessful()){
+                    ResultItem result = response.body();
+                    if (result != null){
+                        String desc = result.getDesc();
+                        contentView.setText(desc);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResultItem> call, Throwable t) {
 
             }
         });
